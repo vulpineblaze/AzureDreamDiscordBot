@@ -66,6 +66,13 @@ bot.on('message', message => {
   	message.channel.sendMessage(retval);
   }
 
+  if(message.content.toLowerCase().includes("!topic")){
+    var topic = message.channel.topic;
+    var chan_name = message.channel.name;
+    console.log("topic:"+topic);
+    message.channel.sendMessage("#"+chan_name+":\n"+topic);
+  }
+
 
 
 	redirector.check_and_respond(message);
