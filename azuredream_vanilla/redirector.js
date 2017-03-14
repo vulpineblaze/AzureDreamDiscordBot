@@ -15,38 +15,46 @@ function toggle_watchful (arg) {
 }
 
 function json_refresher(){
-	fs.readFile('./redirects.JSON', 'utf8', function (err, data) {
-	  if (err) throw err; // we'll not consider error handling for now
-	  redirects = JSON.parse(data);
-	});
+  fs.readFile('./redirects.JSON', 'utf8', function (err, data) {
+    if (err) throw err; // we'll not consider error handling for now
+    redirects = JSON.parse(data);
+  });
 }
 
 var check_and_respond = function(message){
-	// userlist = load_json();
+  // userlist = load_json();
 
-	if(watchful){
+  if(watchful){
 
-  	//  REDIRECTS
-	  	for(var attributename in redirects){
-			  // console.log(attributename+": "+redirects[attributename]);
-			  if(attributename == "timeout"){
-			  	if(watchful_timeout != redirects[attributename]){
-			  		watchful_timeout = redirects[attributename];
-			  	}
-			  }else{
+    //  REDIRECTS
+    for(var attributename in redirects){
+      // console.log(attributename+": "+redirects[attributename]);
 
-				  var redirect = redirects[attributename];
-					if(new RegExp(redirect.join("|")).test(message.content.toLowerCase())){
-				  	watchful=false;
-				  	message.channel.sendMessage(message.author
-				  							+', It looks like your discussing #'
-				  							+attributename
-				  							+'! If so, Please head over to that channel.');
-				  	setTimeout(toggle_watchful, watchful_timeout, true);
-			  	}
-			  }
-		}
-	}
+      // if chan == atritube then break;
+      var channel_name = message.channel.name;
+      // console.log("channel_name:"+channel_name+" vs "+attributename);
+      if(channel_name == attributename){
+        continue;
+      }
+
+      if(attributename == "timeout"){
+        if(watchful_timeout != redirects[attributename]){
+          watchful_timeout = redirects[attributename];
+        }
+      }else{
+
+        var redirect = redirects[attributename];
+        if(new RegExp(redirect.join("|")).test(message.content.toLowerCase())){
+          watchful=false;
+          message.channel.sendMessage(message.author
+                      +', It looks like your discussing #'
+                      +attributename
+                      +'! If so, Please head over to that channel.');
+          setTimeout(toggle_watchful, watchful_timeout, true);
+        }
+      }
+    }
+  }
 
 }
 

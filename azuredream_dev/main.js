@@ -31,14 +31,19 @@ cookie.load_json();
 bot.on('ready', () => {
   console.log('I am ready!');
 });
-
+bot.on('error', function(err){
+    // handle the error safely
+    console.log(err)
+})
 // create an event listener for messages
 bot.on('message', message => {
 	user_active.time_stamp(message.author);
 
 
-  var is_admin = message.member.hasPermission("ADMINISTRATOR");
-
+  var is_admin = false;
+  if( message.member){
+    is_admin =  message.member.hasPermission("ADMINISTRATOR");
+  }
 
   if(json_refresh){
   	json_refresh = false;
@@ -59,8 +64,8 @@ bot.on('message', message => {
 		message.channel.sendMessage("timestamps:\n"+ts_string);
   }
 
-  // if(is_admin && message.content.toLowerCase().includes("!cookie")){
   if(is_admin && message.content.toLowerCase().includes("!cookie")){
+  // if(message.content.toLowerCase().includes("!cookie")){
   	console.log(message.text);
   	var retval = cookie.give_cookie(message,"!cookie");
   	message.channel.sendMessage(retval);
@@ -79,6 +84,30 @@ bot.on('message', message => {
 	autorespond.check_and_respond(message);
 
 });
+
+bot.on('guildMemberRemove', member => {
+  
+  console.log('guildMemberRemove ' + member + " aka " +  member.user.username );
+  var user = "<@149628603632451584>";
+  // me <@149628603632451584>
+  // loki actual "<@246743107855581185>"
+  // var loki = member.client.users.find("<@149628603632451584>") 
+  var test = member.guild.owner; 
+  // console.log("test user left "+loki);
+  // console.log("test user left "+member.client.fetchUser(user).username );
+  
+  test.sendMessage('test user left: '+ member + " aka " +  member.user.username )
+    .then(message => console.log(`Sent message: ${message.content}`))
+    .catch(console.error);
+    // for(var key in users) {
+    //   if(users.hasOwnProperty(key)) {
+    //       console.log("showing: "+users[key]);
+    //   }
+    // }
+  // loki.sendMessage("test user left "+loki);
+});
+
+
 
 // log our bot in
 try{

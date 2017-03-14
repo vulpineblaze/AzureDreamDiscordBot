@@ -1,5 +1,6 @@
 {
-	"students_college" : ["homework","study","studying"],
-	"insomnia_help" : ["i cant sleep","i'm still awake"],
+	"students_college_dev" : ["homework","study","studying"],
+	"insomnia_help_dev" : ["i cant sleep","i'm still awake"],
+	"botz_dev" : ["testtest"],
 	"timeout" : 6000
 }
